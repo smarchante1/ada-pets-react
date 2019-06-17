@@ -6,10 +6,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const PetList = (props) => {
-
+  const list = props.pets.map((pet, i) => {
+    return (<PetCard
+            key={i}
+            name={pet.name}
+            species={pet.species}
+            about={pet.about}
+            location={pet.location}
+          />
+        )
+  });
 
   return (
     <div className="card-group">
+      { list }
     </div>
   )
 }
