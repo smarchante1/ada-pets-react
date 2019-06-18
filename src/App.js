@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PetList from './components/PetList';
-import PetCard from './components/PetCard'
 import PetDetails from './components/PetDetails';
 import SearchBar from './components/SearchBar';
 import NewPetForm from './components/NewPetForm';
@@ -17,11 +16,46 @@ class App extends Component {
     this.state = {
       petList: pets,
       currentPet: undefined,
+      message: '',
     };
   }
 
 
+  onSelectPet = (petId) => {
+    console.log(petId)    
+    const selectedPet = this.state.petList.find((selectedPet) => {
+      return selectedPet.id === petId;
+    });
 
+    this.setState({
+      currentPet: selectedPet,
+    })
+  }
+
+  onRemovePet = (petId) => {
+    const list = this.state.petList
+  
+    let petIndex = list.findIndex(pet => pet.id === petId )
+
+    console.log(petIndex)
+    list.splice(petIndex, 1)
+
+    this.setState({
+      petList: list,
+      currentPet: undefined,
+    })
+    console.log(this.state.petList)
+  }
+
+  addPet = (pet) => {
+    const pets = this.state.petList;
+    pets.push(pet);
+    this.setState({
+      petList: pets,
+      message: `${pet.name} is has been added`,
+    });
+  }
+  
 
   render() {
     const { currentPet } = this.state;
@@ -37,10 +71,12 @@ class App extends Component {
         </section>
           { /* Wave 2:  Where Pet Details should appear */ }
         <section className="pet-list-wrapper">
-          <PetList pets={this.state.petList} />
+          { this.state.currentPet ? <PetDetails currentPet={ currentPet } /> : '' }
+          <PetList pets={this.state.petList} selectPetCallback= {this.onSelectPet} removePetCallback={this.onRemovePet}/>
         </section>
         <section className="new-pet-form-wrapper">
           { /* Wave 3:  Where NewPetForm should appear */ }
+          <NewPetForm addPetCallback= {this.addPet}/>
         </section>
       </main>
     );
